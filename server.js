@@ -9,6 +9,7 @@ const authRoute =  require('./routes/authRoute')
 const unitRoute = require('./routes/unitRoute')
 const categoriesRoute = require('./routes/categoriesRoute')
 const productRoute = require('./routes/productRoute')
+const discountRoute = require('./routes/discountRoute')
 
 
 //middlewares
@@ -21,6 +22,7 @@ app.use('/auth',authRoute)
 app.use('/units',unitRoute)
 app.use('/categories',categoriesRoute)
 app.use('/product',productRoute)
+app.use('/disocunt',discountRoute)
 
 
 //error handler

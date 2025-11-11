@@ -38,11 +38,11 @@ const updateDiscount = async (req, res) => {
 
     return SucessResponse(res, updatedDiscount, response.DISCOUNT_UPDATED_SUCCESS);
   } catch (error) {
-    ErrorResponse(res, response.DISCOUNT_UPDATED_FAILED, 500, error);
+    ErrorResponse(res, response.ISE, 500, error);
   }
 };
 
-// 🟢 Soft delete discount
+// Soft delete discount
 const deleteDiscountById = async (req, res) => {
   try {
     const discountId = req.params.id;
@@ -57,11 +57,11 @@ const deleteDiscountById = async (req, res) => {
 
     return SucessResponse(res, null, response.DISCOUNT_DELETED_SUCCESS);
   } catch (error) {
-    ErrorResponse(res, response.DISCOUNT_DELETED_FAILED, 500, error);
+    ErrorResponse(res, response.ISE, 500, error);
   }
 };
 
-// 🟢 Get discount by ID
+//  Get discount by ID
 const getDiscountById = async (req, res) => {
   try {
     const discountId = req.params.id;
@@ -75,7 +75,7 @@ const getDiscountById = async (req, res) => {
 
     return SucessResponse(res, discount, response.GET_DISCOUNTS_SUCCESS);
   } catch (error) {
-    ErrorResponse(res, response.GET_DISCOUNTS_FAILED, 500, error);
+    ErrorResponse(res, response.ISE, 500, error);
   }
 };
 

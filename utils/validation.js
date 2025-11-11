@@ -188,7 +188,7 @@ const updateCategorySchema = Joi.object({
     }),
 });
 
-// ✅ Update Product Schema — all optional but with messages
+
 const updateProductSchema = createProductSchema
   .fork(Object.keys(createProductSchema.describe().keys), (schema) => schema.optional())
   .min(1)
@@ -197,6 +197,80 @@ const updateProductSchema = createProductSchema
   });
 
 
+
+const createDiscountSchema = Joi.object({
+  product_id: Joi.number().integer().positive().required().messages({
+    "number.base": "Product ID must be a number",
+    "number.integer": "Product ID must be an integer",
+    "any.required": "Product ID is required",
+  }),
+
+  discount_type: Joi.string()
+    .valid("PERCENTAGE", "FLAT")
+    .required()
+    .messages({
+      "any.only": "Discount type must be either PERCENTAGE or FLAT",
+      "any.required": "Discount type is required",
+    }),
+
+  percentage: Joi.when("discount_type", {
+    is: "PERCENTAGE",
+    then: Joi.number().min(0).max(100).precision(2).required().messages({
+      "number.base": "Percentage must be a number",
+      "number.min": "Percentage cannot be less than 0",
+      "number.max": "Percentage cannot exceed 100",
+      "any.required": "Percentage is required for PERCENTAGE discount type",
+    }),
+    otherwise: Joi.number().precision(2).default(0),
+  }),
+
+  flat_amount: Joi.when("discount_type", {
+    is: "FLAT",
+    then: Joi.number().min(0).precision(2).required().messages({
+      "number.base": "Flat amount must be a number",
+      "any.required": "Flat amount is required for FLAT discount type",
+    }),
+    otherwise: Joi.number().precision(2).default(0),
+  }),
+
+  min_purchase_amount: Joi.number()
+    .min(0)
+    .precision(2)
+    .optional()
+    .messages({
+      "number.base": "Minimum purchase amount must be a number",
+    }),
+
+  max_purchase_amount: Joi.number()
+    .min(Joi.ref("min_purchase_amount"))
+    .precision(2)
+    .optional()
+    .messages({
+      "number.base": "Maximum purchase amount must be a number",
+      "number.min": "Maximum purchase amount must be greater than or equal to minimum purchase amount",
+    }),
+
+  start_date: Joi.date().required().messages({
+    "date.base": "Start date must be a valid date",
+    "any.required": "Start date is required",
+  }),
+
+  end_date: Joi.date()
+    .greater(Joi.ref("start_date"))
+    .optional()
+    .messages({
+      "date.base": "End date must be a valid date",
+      "date.greater": "End date must be after the start date",
+    }),
+
+  used_count: Joi.number().integer().min(0).default(0),
+  is_deleted: Joi.boolean().default(false),
+});
+
+const updateDiscountSchema = createDiscountSchema.fork(
+  Object.keys(createDiscountSchema.describe().keys),
+  (schema) => schema.optional()
+);
 
 
 
@@ -209,4 +283,6 @@ module.exports = {
   updateCategorySchema,
   createProductSchema,
   updateProductSchema,
+  createDiscountSchema,
+  updateDiscountSchema
 };
