@@ -2,10 +2,11 @@ const {OAuth2Client} =require('google-auth-library')
 
 require('dotenv').config()
 
-const client = new OAuth2Client(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    process.env.REDIRECT_URL
+const client = new OAuth2Client({
+    clientId:process.env.GOOGLE_CLIENT_ID,
+    clientSecret:process.env.GOOGLE_CLIENT_SECRET,
+    redirectUri:process.env.REDIRECT_URL
+}
 );
 
 const sessionObj = {
