@@ -274,6 +274,173 @@ const updateDiscountSchema = createDiscountSchema.fork(
 
 
 
+const createCartSchema = Joi.object({
+  product_id: Joi.number().integer().positive().required().messages({
+    "number.base": "Product ID must be a number",
+    "number.integer": "Product ID must be an integer",
+    "number.positive": "Product ID must be a positive number",
+    "any.required": "Product ID is required",
+  }),
+
+  quantity: Joi.number().integer().min(1).required().messages({
+    "number.base": "Quantity must be a number",
+    "number.integer": "Quantity must be an integer",
+    "number.min": "Quantity must be at least 1",
+    "any.required": "Quantity is required",
+  }),
+
+  unit_price: Joi.number().precision(2).positive().required().messages({
+    "number.base": "Unit price must be a number",
+    "number.positive": "Unit price must be a positive value",
+    "any.required": "Unit price is required",
+  }),
+
+  total_price: Joi.number().precision(2).positive().required().messages({
+    "number.base": "Total price must be a number",
+    "number.positive": "Total price must be a positive value",
+    "any.required": "Total price is required",
+  }),
+});
+
+const updateCartSchema = createCartSchema.fork(
+  Object.keys(createCartSchema.describe().keys),
+  (schema) => schema.optional()
+);
+
+
+const createPincodeSchema = Joi.object({
+  pincode: Joi.string()
+    .pattern(/^[1-9][0-9]{5}$/)
+    .required()
+    .messages({
+      'string.empty': 'Pincode is required.',
+      'string.pattern.base': 'Pincode must be a valid 6-digit number.',
+      'any.required': 'Pincode field is mandatory.',
+    }),
+
+  city: Joi.string().trim().min(2).max(100).required().messages({
+    'string.empty': 'City name is required.',
+    'string.min': 'City name must be at least 2 characters long.',
+    'any.required': 'City is mandatory.',
+  }),
+
+  district: Joi.string().trim().max(100).allow('', null).messages({
+    'string.max': 'District name should not exceed 100 characters.',
+  }),
+
+  state: Joi.string().trim().min(2).max(100).required().messages({
+    'string.empty': 'State name is required.',
+    'any.required': 'State is mandatory.',
+  }),
+
+  country: Joi.string().trim().default('India').messages({
+    'string.base': 'Country name must be a string.',
+  }),
+});
+
+const updatePincodeSchema = createPincodeSchema.fork(
+  Object.keys(createPincodeSchema.describe().keys),
+  (schema) => schema.optional()
+);
+
+const createAddressSchema = Joi.object({
+  address_type: Joi.string().valid('Home', 'Office', 'Other').required().messages({
+    'any.required': 'Address type is required',
+    'any.only': 'Address type must be Home, Office, or Other'
+  }),
+  full_name: Joi.string().min(3).max(100).required().messages({
+    'string.empty': 'Full name is required',
+    'string.min': 'Full name must be at least 3 characters'
+  }),
+  mobile_number: Joi.string()
+    .pattern(/^[6-9]\d{9}$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'Mobile number must be a valid 10-digit Indian number',
+      'any.required': 'Mobile number is required'
+    }),
+  address_line1: Joi.string().max(255).required(),
+  address_line2: Joi.string().max(255).allow('', null),
+  city: Joi.string().max(100).required(),
+  state: Joi.string().max(100).required(),
+  postal_code: Joi.string()
+    .pattern(/^[1-9][0-9]{5}$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'Postal code must be a valid 6-digit pincode',
+      'any.required': 'Postal code is required'
+    }),
+  country: Joi.string().default('India'),
+  is_default: Joi.boolean().default(false),
+});
+
+const updateAddressSchema = createAddressSchema.fork(
+  Object.keys(createAddressSchema.describe().keys),
+  (schema) => schema.optional()
+);
+
+
+
+const updateOrderStatusSchema = Joi.object({
+  status: Joi.string()
+    .valid("Pending", "Paid", "Shipped", "Delivered", "Cancelled")
+    .required()
+    .messages({
+      "any.only":
+        "Status must be one of Pending, Paid, Shipped, Delivered, or Cancelled.",
+      "any.required": "Order status is required.",
+    }),
+});
+
+const checkoutSchema = Joi.object({
+  shipping_address_id: Joi.number()
+    .integer()
+    .required()
+    .messages({
+      "number.base": "Shipping address ID must be a number.",
+      "any.required": "Shipping address ID is required.",
+    }),
+
+  pincode_id: Joi.number()
+    .integer()
+    .required()
+    .messages({
+      "number.base": "Pincode ID must be a number.",
+      "any.required": "Pincode ID is required.",
+    }),
+
+  // Since you're only using COD, this will always default
+  payment_method: Joi.string()
+    .valid("Cash on Delivery")
+    .default("Cash on Delivery")
+    .messages({
+      "any.only": "Only 'Cash on Delivery' payment method is supported.",
+    }),
+
+  other_charge: Joi.string()
+    .valid("Standard", "Express", "Free", "Custom")
+    .default("Standard")
+    .messages({
+      "any.only": "Invalid delivery type. Choose Standard, Express, Free, or Custom.",
+    }),
+
+  tax: Joi.number().precision(2).optional().messages({
+    "number.base": "Tax must be a valid number.",
+  }),
+
+  discount: Joi.number().precision(2).optional().messages({
+    "number.base": "Discount must be a valid number.",
+  }),
+
+  total_price: Joi.number().precision(2).required().messages({
+    "number.base": "Total price must be a valid number.",
+    "any.required": "Total price is required.",
+  }),
+});
+
+
+
+
 module.exports = {
   registerSchema,
   loginSchema,
@@ -284,5 +451,14 @@ module.exports = {
   createProductSchema,
   updateProductSchema,
   createDiscountSchema,
-  updateDiscountSchema
+  updateDiscountSchema,
+  createCartSchema,
+  updateCartSchema,
+  createPincodeSchema,
+  updatePincodeSchema,
+  createAddressSchema,
+  updateAddressSchema,
+  checkoutSchema,
+  updateOrderStatusSchema
+
 };
