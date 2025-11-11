@@ -7,6 +7,20 @@ const ErrorResponse = (res, error, statusCode = 500) => {
 
 const response = {
 
+    ISE:"",
+
+    ALREADY_REGISTERED:"",
+    REGISTER_SUCCESS:"",
+
+    USER_NOT_FOUND:"",
+    INVALID_LOGIN:"",
+    LOGIN_SUCCESS:"",
+    
+    PROFILE_GET_SUCCESS:"",
+    PROFILE_GET_FAILED:"",
+
+
+
 };
 
 module.exports = { SucessResponse, ErrorResponse, response };
