@@ -288,18 +288,6 @@ const createCartSchema = Joi.object({
     "number.min": "Quantity must be at least 1",
     "any.required": "Quantity is required",
   }),
-
-  unit_price: Joi.number().precision(2).positive().required().messages({
-    "number.base": "Unit price must be a number",
-    "number.positive": "Unit price must be a positive value",
-    "any.required": "Unit price is required",
-  }),
-
-  total_price: Joi.number().precision(2).positive().required().messages({
-    "number.base": "Total price must be a number",
-    "number.positive": "Total price must be a positive value",
-    "any.required": "Total price is required",
-  }),
 });
 
 const updateCartSchema = createCartSchema.fork(

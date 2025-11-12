@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { createValidator } = require('express-joi-validation');
-const validator = createValidator({});
+const validator = createValidator({passError:true});
 
 const discountController = require('../controllers/discountController');
 const {

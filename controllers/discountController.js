@@ -1,5 +1,6 @@
 const db = require('../db/db');
 const { ErrorResponse, SucessResponse, response } = require('../utils/response');
+const _ =  require('lodash')
 
 //  Get all discounts
 const getAllDiscounts = async (req, res) => {
@@ -15,11 +16,23 @@ const getAllDiscounts = async (req, res) => {
 const createDiscount = async (req, res) => {
   try {
     const discountData = req.body;
-    const [newDiscountId] = await db('discounts').insert(discountData);
-    const newDiscount = await db('discounts').where({ id: newDiscountId }).first();
+    discountData.slug = _.kebabCase(
+      `${discountData.product_id}-${discountData.discount_type}-${discountData.percentage || discountData.flat_amount}-${discountData.start_date}`
+    );
+    const existing = await db("discounts").where({ slug: discountData.slug, is_deleted: false }).first();
+    if (existing) {
+      return ErrorResponse(res, response.DISCOUNT_ALREADY_EXISTS, 400);
+    }
+    const [newDiscountId] = await db("discounts").insert(discountData);
+    const newDiscount = await db("discounts").where({ id: newDiscountId }).first();
     return SucessResponse(res, newDiscount, response.DISCOUNT_CREATED_SUCCESS);
+
   } catch (error) {
-    ErrorResponse(res, response.ISE, 500, error);
+    if (error.code === "ER_DUP_ENTRY" || error.code === "SQLITE_CONSTRAINT") {
+      return ErrorResponse(res, response.DISCOUNT_ALREADY_EXISTS, 400);
+    }
+    console.error("Create Discount Error:", error);
+    return ErrorResponse(res, response.ISE, 500, error);
   }
 };
 
@@ -38,6 +51,10 @@ const updateDiscount = async (req, res) => {
 
     return SucessResponse(res, updatedDiscount, response.DISCOUNT_UPDATED_SUCCESS);
   } catch (error) {
+    
+    if (error.code === "ER_DUP_ENTRY" || error.code === "SQLITE_CONSTRAINT") {
+      return ErrorResponse(res, response.DISCOUNT_ALREADY_EXISTS, 400);
+    }
     ErrorResponse(res, response.ISE, 500, error);
   }
 };

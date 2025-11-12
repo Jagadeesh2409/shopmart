@@ -115,7 +115,7 @@ const loginWithGoogle = (req,res)=>{
 }
 
 const profile = async(req,res)=>{
-    const id = req.user
+    const id = req.user.id
     try {
         const user =  await db('users').where({id}).first()
     if(!user){

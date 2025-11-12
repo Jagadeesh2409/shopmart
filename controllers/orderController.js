@@ -2,7 +2,6 @@ const knex = require("../db/db");
 const { SucessResponse, ErrorResponse,response } = require("../utils/response");
 
 
-
 const getAllOrders = async (req, res) => {
   const userId = req.user.userId;
 

@@ -1,5 +1,5 @@
 const db = require('../db/db');
-const { SuccessResponse, ErrorResponse, response } = require('../utils/response');
+const { SucessResponse, ErrorResponse, response } = require('../utils/response');
 const _ = require('lodash');
 
 //  Get all products
@@ -8,10 +8,10 @@ const getAllProducts = async (req, res) => {
     const products = await db('products').where({ is_deleted: false });
 
     if (!products.length) {
-      return SuccessResponse(res, [], response.NO_PRODUCTS_FOUND);
+      return SucessResponse(res, [], response.NO_PRODUCTS_FOUND);
     }
 
-    return SuccessResponse(res, products, response.GET_PRODUCTS_SUCCESS);
+    return SucessResponse(res, products, response.GET_PRODUCTS_SUCCESS);
   } catch (error) {
     console.error('Error fetching products:', error);
     return ErrorResponse(res, response.ISE, 500);
@@ -28,7 +28,7 @@ const createProduct = async (req, res) => {
     const [newProductId] = await db('products').insert(productData);
     const newProduct = await db('products').where({ id: newProductId }).first();
 
-    return SuccessResponse(res, newProduct, response.PRODUCT_CREATED_SUCCESS);
+    return SucessResponse(res, newProduct, response.PRODUCT_CREATED_SUCCESS);
   } catch (error) {
     console.error('Error creating product:', error);
 
@@ -57,7 +57,7 @@ const updateProduct = async (req, res) => {
       return ErrorResponse(res, response.PRODUCT_NOT_FOUND, 404);
     }
 
-    return SuccessResponse(res, updatedProduct, response.PRODUCT_UPDATED_SUCCESS);
+    return SucessResponse(res, updatedProduct, response.PRODUCT_UPDATED_SUCCESS);
   } catch (error) {
     console.error('Error updating product:', error);
     return ErrorResponse(res, response.ISE, 500);
@@ -74,7 +74,7 @@ const deleteProduct = async (req, res) => {
       return ErrorResponse(res, response.PRODUCT_NOT_FOUND, 404);
     }
 
-    return SuccessResponse(res, null, response.PRODUCT_DELETED_SUCCESS);
+    return SucessResponse(res, null, response.PRODUCT_DELETED_SUCCESS);
   } catch (error) {
     console.error('Error deleting product:', error);
     return ErrorResponse(res, response.ISE, 500);
@@ -93,7 +93,7 @@ const getProductById = async (req, res) => {
       return ErrorResponse(res, response.PRODUCT_NOT_FOUND, 404);
     }
 
-    return SuccessResponse(res, product, response.GET_PRODUCTS_SUCCESS);
+    return SucessResponse(res, product, response.GET_PRODUCTS_SUCCESS);
   } catch (error) {
     console.error('Error fetching product by ID:', error);
     return ErrorResponse(res, response.ISE, 500);

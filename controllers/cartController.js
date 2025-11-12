@@ -3,7 +3,7 @@ const { ErrorResponse, SucessResponse, response } = require('../utils/response')
 
 //  Get all items in the user's cart
 const getCartItems = async (req, res) => {
-  const userId = req.user.userId;
+  const userId = req.user.id;
   try {
     const cartItems = await db('cart')
       .where({ user_id: userId })
@@ -27,11 +27,9 @@ const getCartItems = async (req, res) => {
 
 //  Add item to cart
 const addItemToCart = async (req, res) => {
-  const userId = req.user.userId;
-
+  const userId = req.user.id;
   try {
     const { product_id, quantity } = req.body;
-
     //  Fetch product to calculate prices dynamically
     const product = await db('products')
       .where({ id: product_id, is_deleted: false })
@@ -40,7 +38,6 @@ const addItemToCart = async (req, res) => {
     if (!product) {
       return ErrorResponse(res, response.PRODUCT_NOT_FOUND, 404);
     }
-
     const unit_price = product.selling_price;
     const total_price = unit_price * quantity;
 

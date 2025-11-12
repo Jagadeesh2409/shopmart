@@ -6,6 +6,7 @@ const ErrorResponse = (res, error, statusCode = 500) => {
 };
 
 const response = {
+
   ISE: "Internal Server Error.",
 
   // Auth
@@ -18,6 +19,7 @@ const response = {
   // Profile
   PROFILE_GET_SUCCESS: "Profile retrieved successfully.",
   PROFILE_GET_FAILED: "Failed to retrieve profile.",
+  MISSING_TOKEN:"Token is missing",
 
   // Units
   NO_UNITS_FOUND: "No units found.",
@@ -50,6 +52,7 @@ const response = {
   DISCOUNT_NOT_FOUND: "Discount not found.",
   DISCOUNT_DELETED_SUCCESS: "Discount deleted successfully.",
   DISCOUNT_UPDATED_SUCCESS: "Discount updated successfully.",
+  DISCOUNT_ALREADY_EXISTS: "Discount already exist",
 
   // Cart
   GET_CART_ITEMS_SUCCESS: "Cart items retrieved successfully.",

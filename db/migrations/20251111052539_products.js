@@ -16,9 +16,9 @@ exports.up = function(knex) {
     table.boolean('is_deleted').notNullable().defaultTo(false);
     table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
     table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());
-    table.index(['category_id', 'brand']);
   });
 };
+
 
 exports.down = function(knex) {
   return knex.schema.dropTableIfExists('products');

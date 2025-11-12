@@ -15,6 +15,7 @@ exports.up = function(knex) {
     table.decimal('max_purchase_amount', 10, 2);
     table.timestamp('start_date').defaultTo(knex.fn.now());
     table.timestamp('end_date').nullable();
+    table.string('slug').notNullable().unique()
     table.boolean('is_deleted').notNullable().defaultTo(false);
     table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
     table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());

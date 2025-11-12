@@ -4,7 +4,7 @@ exports.up = function(knex) {
         table.string('username').notNullable();
         table.string('email').notNullable().unique();
         table.string('password').notNullable();
-        table.integer('phone_number').notNullable().unique();
+        table.string('phone_number').notNullable().unique();
         table.boolean("is_admin").notNullable().defaultTo(false);
         table.enum('status', ['PENDING', 'ACTIVE', 'BLOCKED']).defaultTo('PENDING');
         table.string('google_id');

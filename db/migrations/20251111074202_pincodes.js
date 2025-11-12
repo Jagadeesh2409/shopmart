@@ -12,5 +12,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  knex.schema.dropTableIfExists("pincodes");
+  return knex.schema.dropTableIfExists("pincodes");
 };

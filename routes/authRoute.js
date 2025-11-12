@@ -9,6 +9,6 @@ router.post('/register', Validator.body(registerSchema),registerUser);
 router.post('/login', Validator.body(loginSchema),loginUser);
 router.get('/google',loginWithGoogle)
 router.get('/google/callback',googleAuth);  
-router.get('profile',authenticateToken, profile)
+router.get('/profile',authenticateToken, profile)
 
 module.exports = router;
